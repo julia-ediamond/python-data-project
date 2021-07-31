@@ -5,17 +5,17 @@ import datetime
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
 
-def format_temperature(temp):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        for temp in csv_reader:
-            print(
-                f"The min temperature on {temp[0]} was {temp[1]}{DEGREE_SYBMOL} Celsius, while the max was {temp[2]}{DEGREE_SYBMOL} Celsius.")
-            # return f"{temp}{DEGREE_SYBMOL}"
+# def format_temperature(temp):
+#     with open("tests/data/example_one.csv") as csv_file:
+#         csv_reader = csv.reader(csv_file, delimiter=",")
+#         next(csv_reader)
+#         for temp in csv_reader:
+# print(
+#     f"The min temperature on {temp[0]} was {temp[1]}{DEGREE_SYBMOL} Celsius, while the max was {temp[2]}{DEGREE_SYBMOL} Celsius.")
+# return f"{temp}{DEGREE_SYBMOL}"
 
+# format_temperature(30)
 
-format_temperature(30)
 """Takes a temperature and returns it in string format with the degrees
         and celcius symbols.
 
@@ -28,25 +28,22 @@ format_temperature(30)
 
 
 def convert_date(iso_string):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        for iso_string in csv_reader:
+    #iso_string = "2021-07-02T07:00:00+08:00"
+    # print(str(iso_string))
+    weekday = datetime.datetime.strptime(
+        str(iso_string), "%Y-%m-%dT%H:%M:%S%z").strftime("%A")
+    month = datetime.datetime.strptime(
+        iso_string, "%Y-%m-%dT%H:%M:%S%z").strftime("%B")
+    day = datetime.datetime.strptime(
+        iso_string, "%Y-%m-%dT%H:%M:%S%z").strftime("%d")
+    year = datetime.datetime.strptime(
+        iso_string, "%Y-%m-%dT%H:%M:%S%z").strftime("%Y")
+    #print(f"{weekday} {day} {month} {year}")
 
-            weekday = datetime.datetime.strptime(
-                iso_string[0], "%Y-%m-%dT%H:%M:%S%z").strftime("%A")
-            month = datetime.datetime.strptime(
-                iso_string[0], "%Y-%m-%dT%H:%M:%S%z").strftime("%B")
-            day = datetime.datetime.strptime(
-                iso_string[0], "%Y-%m-%dT%H:%M:%S%z").strftime("%d")
-            year = datetime.datetime.strptime(
-                iso_string[0], "%Y-%m-%dT%H:%M:%S%z").strftime("%Y")
-            print(f"{weekday} {day} {month} {year}.")
-
-        return weekday, month, day, year
+    return f"{weekday} {day} {month} {year}"
 
 
-convert_date("2021-07-02T07:00:00+08:00")
+print(convert_date("2021-07-02T07:00:00+08:00"))
 
 
 """Converts and ISO formatted date into a human readable format.
@@ -136,24 +133,34 @@ pass
 
 
 def find_min(weather_data):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        values_list = []
-        for weather_data in csv_reader:
-            values_list.append(weather_data[1])
-            values_list.append(weather_data[2])
-            min_value = min(values_list)
-            min_index = values_list.index(min_value)
-    print(
-        f'Smallest number in the list is : {min_value}. And it has an index of {min_index}')
+    # if (weather_data == []):
+    #     return ()
+    # min_value = weather_data[0]
+    # min_index = 0
+    # if (weather_data.count(min_value) > 1):
+    #     min_value_index = [i for i, value in enumerate(
+    #         weather_data) if value == min_value]
+    #     min_index = min_value_index[-1]
+    # else:
+    #     min_index == weather_data.index(min_value)
 
+    # return float(min_value), min_index
+
+    if (weather_data == []):
+        return ()
+    min_value = float(weather_data[0])
+    min_index = 0
+    if len(weather_data) != 0:
+        for index, value in enumerate(weather_data):
+
+            if float(value) <= min_value:
+                min_value = float(value)
+                min_index = index
     return min_value, min_index
 
 
-find_min(1)
+# find_min(1)
 """Calculates the minimum value in a list of numbers.
-
     Args:
         weather_data: A list of numbers.
     Returns:
@@ -170,11 +177,11 @@ def find_max(weather_data):
         for weather_data in csv_reader:
             max_list.append(weather_data[1])
             max_list.append(weather_data[2])
-            #print(f"FIND MAX LIST {max_list}")
+            # print(f"FIND MAX LIST {max_list}")
             max_value = max(max_list)
             max_index = max_list.index(max_value)
-    print(
-        f"The maximum number in the list is: {max_value}. And it has an index of {max_index}.")
+    # print(
+    #     f"The maximum number in the list is: {max_value}. And it has an index of {max_index}.")
 
     return max_value, max_index
 
@@ -190,37 +197,37 @@ find_max(1)
 pass
 
 
-def generate_summary(weather_data):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        summary_list = []
-        output_string = ""
-        for weather_data in csv_reader:
-            summary_list.append(weather_data[1])
-            summary_list.append(weather_data[2])
-    print(f"This is SUMARU SUMARY LIST {summary_list}")
-    output_string += f"!---{convert_date(weather_data)}----!\n {find_min(summary_list)}\n {find_max(summary_list)}\n {calculate_mean(summary_list)}\n"
-    # print(output_string)
+# def generate_summary(weather_data):
+#     with open("tests/data/example_one.csv") as csv_file:
+#         csv_reader = csv.reader(csv_file, delimiter=",")
+#         next(csv_reader)
+#         summary_list = []
+#         output_string = ""
+#         for weather_data in csv_reader:
+#             summary_list.append(weather_data[1])
+#             summary_list.append(weather_data[2])
+#     print(f"This is SUMARU SUMARY LIST {summary_list}")
+#     output_string += f"!---{convert_date(weather_data[0])}----!\n {find_min(summary_list)}\n {find_max(summary_list)}\n {calculate_mean(summary_list)}\n"
+#     # print(output_string)
 
-    #output_string = ""
-    #test = []
-    # for weather_data in csv_reader:
-    #outpu = print(f"GENERATE DATA SUMMARY {weather_data}")
+#     # output_string = ""
+#     # test = []
+#     # for weather_data in csv_reader:
+#     # outpu = print(f"GENERATE DATA SUMMARY {weather_data}")
 
-    #    test.append(weather_data[1])
-    # print(weather_data)
-    # list_test.append(weather_data[2])
-    #    print(f"TEST LIST: {test}")
-    # return outpu
-    return output_string
+#     #    test.append(weather_data[1])
+#     # print(weather_data)
+#     # list_test.append(weather_data[2])
+#     #    print(f"TEST LIST: {test}")
+#     # return outpu
+#     return output_string
 
 
-generate_summary(2)
-#summary_list = [weather_data[1], weather_data[2]]
+# generate_summary(2)
+# summary_list = [weather_data[1], weather_data[2]]
 
 # print(f"SUMMARY LIST: {summary_list}")  # SUMMARY LIST: ['0', '2']
-#output_string += f"!---{convert_date(weather_data[0])}----!\nMinimum temperature was {convert_f_to_c(find_min(summary_list)[0])}\n Maximum temparature was {convert_f_to_c(find_max(summary_list)[0])}\n"
+# output_string += f"!---{convert_date(weather_data[0])}----!\nMinimum temperature was {convert_f_to_c(find_min(summary_list)[0])}\n Maximum temparature was {convert_f_to_c(find_max(summary_list)[0])}\n"
 # The mean temperature {convert_f_to_c(calculate_mean(summary_list)[0])}\n Minimum temperature was {convert_f_to_c(find_min(summary_list)[0])}"
 # print(output_string)
 # return output_string
@@ -235,23 +242,23 @@ generate_summary(2)
 pass
 
 
-def generate_daily_summary(weather_data):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
+# def generate_daily_summary(weather_data):
+#     with open("tests/data/example_one.csv") as csv_file:
+#         csv_reader = csv.reader(csv_file, delimiter=",")
+#         next(csv_reader)
 
-        results = ""
-        new_list = []
-        for weather_data in csv_reader:
-            new_list.append(weather_data[1])
-            new_list.append(weather_data[2])
-    # print(f"!!!!!!!!!{new_list}")
-    results += f"Results are: ---{convert_date(weather_data[0])}----\n Minimum temperature: {convert_f_to_c(find_min(new_list)[0])}\n Maximum temperature: {convert_f_to_c(find_max(new_list)[0])}\n"
+#         results = ""
+#         new_list = []
+#         for weather_data in csv_reader:
+#             new_list.append(weather_data[1])
+#             new_list.append(weather_data[2])
+#     # print(f"!!!!!!!!!{new_list}")
+#     results += f"Results are: ---{convert_date(weather_data[0])}----\n Minimum temperature: {convert_f_to_c(find_min(new_list)[0])}\n Maximum temperature: {convert_f_to_c(find_max(new_list)[0])}\n"
 
-    return results
+#     return results
 
 
-generate_daily_summary(1)
+# generate_daily_summary(1)
 """Outputs a daily summary for the given weather data.
 
     Args:
