@@ -5,16 +5,11 @@ import datetime
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
 
-# def format_temperature(temp):
-#     with open("tests/data/example_one.csv") as csv_file:
-#         csv_reader = csv.reader(csv_file, delimiter=",")
-#         next(csv_reader)
-#         for temp in csv_reader:
-# print(
-#     f"The min temperature on {temp[0]} was {temp[1]}{DEGREE_SYBMOL} Celsius, while the max was {temp[2]}{DEGREE_SYBMOL} Celsius.")
-# return f"{temp}{DEGREE_SYBMOL}"
+def format_temperature(temp):
+    temp_string = f" {str(temp)} {DEGREE_SYBMOL}"
+    print(temp_string)
+    return temp_string
 
-# format_temperature(30)
 
 """Takes a temperature and returns it in string format with the degrees
         and celcius symbols.
@@ -28,7 +23,7 @@ DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
 
 def convert_date(iso_string):
-    #iso_string = "2021-07-02T07:00:00+08:00"
+    # iso_string = "2021-07-02T07:00:00+08:00"
     # print(str(iso_string))
     weekday = datetime.datetime.strptime(
         str(iso_string), "%Y-%m-%dT%H:%M:%S%z").strftime("%A")
@@ -38,13 +33,12 @@ def convert_date(iso_string):
         iso_string, "%Y-%m-%dT%H:%M:%S%z").strftime("%d")
     year = datetime.datetime.strptime(
         iso_string, "%Y-%m-%dT%H:%M:%S%z").strftime("%Y")
-    #print(f"{weekday} {day} {month} {year}")
+    # print(f"{weekday} {day} {month} {year}")
 
     return f"{weekday} {day} {month} {year}"
 
 
 print(convert_date("2021-07-02T07:00:00+08:00"))
-
 
 """Converts and ISO formatted date into a human readable format.
 
@@ -57,18 +51,15 @@ pass
 
 
 def convert_f_to_c(temp_in_farenheit):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        for temp_in_farenheit in csv_reader:
-            min_celcius = (float(temp_in_farenheit[1]) - 32) * 5.0/9.0
-            max_celcius = (float(temp_in_farenheit[2]) - 32) * 5.0/9.0
-            print(
-                f"The minimum Celcius was {float(temp_in_farenheit[1])}. The max Celcius was {float(temp_in_farenheit[2])}.")
-        return min_celcius, max_celcius
+    print(temp_in_farenheit)
+    celcius = round((temp_in_farenheit - 32) * 5/9, 1)
+    return celcius
+    # max_celcius = (temp_in_farenheit - 32) * 5/9
+    # print(f"this should be something {celcius}")
+    # max_celcius = (temp_in_farenheit[2] - 32) * 5/9
+    # print(f"{min_celcius}. The max Celcius was {max_celcius}.")
 
 
-convert_f_to_c(30.0)
 """Converts an temperature from farenheit to celcius.
 (°F – 32) x 5/9 = °C
     Args:
@@ -109,23 +100,19 @@ pass
 
 
 def load_data_from_csv(csv_file):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        data_list = []
-        for row in csv_reader:
-            if row != 0:
-                data_list.append(row)
-    print(data_list)
+    data_list = []
+    with open(csv_file, mode="r", encoding="utf-8") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        for index, line in enumerate(csv_reader):
+            if line != [] and index != 0:
+                data_list.append([line[0], int(line[1]), int(line[2])])
     return data_list
 
 
-load_data_from_csv(5)
-
 """Reads a csv file and stores the data in a list.
 
-    Args:
-        csv_file: a string representing the file path to a csv file.
+    Args:a string representing the file path to a csv file.
+        csv_file:
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     """
@@ -133,19 +120,6 @@ pass
 
 
 def find_min(weather_data):
-    # if (weather_data == []):
-    #     return ()
-    # min_value = weather_data[0]
-    # min_index = 0
-    # if (weather_data.count(min_value) > 1):
-    #     min_value_index = [i for i, value in enumerate(
-    #         weather_data) if value == min_value]
-    #     min_index = min_value_index[-1]
-    # else:
-    #     min_index == weather_data.index(min_value)
-
-    # return float(min_value), min_index
-
     if (weather_data == []):
         return ()
     min_value = float(weather_data[0])
@@ -159,7 +133,6 @@ def find_min(weather_data):
     return min_value, min_index
 
 
-# find_min(1)
 """Calculates the minimum value in a list of numbers.
     Args:
         weather_data: A list of numbers.
@@ -170,23 +143,18 @@ pass
 
 
 def find_max(weather_data):
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        max_list = []
-        for weather_data in csv_reader:
-            max_list.append(weather_data[1])
-            max_list.append(weather_data[2])
-            # print(f"FIND MAX LIST {max_list}")
-            max_value = max(max_list)
-            max_index = max_list.index(max_value)
-    # print(
-    #     f"The maximum number in the list is: {max_value}. And it has an index of {max_index}.")
-
-    return max_value, max_index
+    if weather_data == []:
+        return ()
+    max_value = weather_data[0]
+    max_index = 0
+    if len(weather_data) != 0:
+        for index, value in enumerate(weather_data):
+            if float(value) >= float(max_value):
+                max_value = float(value)
+                max_index = index
+    return float(max_value), max_index
 
 
-find_max(1)
 """Calculates the maximum value in a list of numbers.
 
     Args:
