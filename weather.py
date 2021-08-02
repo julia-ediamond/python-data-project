@@ -1,14 +1,14 @@
 import csv
 import datetime
+import math
 
 
 DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
 
 
 def format_temperature(temp):
-    temp_string = f" {str(temp)} {DEGREE_SYBMOL}"
-    print(temp_string)
-    return temp_string
+    # temp_string = f" {str(temp)} {DEGREE_SYBMOL}"
+    return (f"{temp}{DEGREE_SYBMOL}")
 
 
 """Takes a temperature and returns it in string format with the degrees
@@ -51,13 +51,12 @@ pass
 
 
 def convert_f_to_c(temp_in_farenheit):
-    print(temp_in_farenheit)
-    celcius = round((temp_in_farenheit - 32) * 5/9, 1)
-    return celcius
-    # max_celcius = (temp_in_farenheit - 32) * 5/9
-    # print(f"this should be something {celcius}")
-    # max_celcius = (temp_in_farenheit[2] - 32) * 5/9
-    # print(f"{min_celcius}. The max Celcius was {max_celcius}.")
+    a = float(temp_in_farenheit)
+    temp_in_c = (a - 32) / 1.8
+    return(float(round(temp_in_c, 1)))
+    # print(temp_in_farenheit)
+    # celcius = round((temp_in_farenheit - 32) * 5/9, 1)
+    # return celcius
 
 
 """Converts an temperature from farenheit to celcius.
@@ -72,22 +71,18 @@ pass
 
 def calculate_mean(weather_data):
 
-    with open("tests/data/example_one.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        next(csv_reader)
-        for weather_data in csv_reader:
-            # print(weather_data[1])
-            nums_list = []
-            for data in csv_reader:
-                nums_list.append(float(data[1]))
-                nums_list.append(float(data[2]))
-        mean_num = sum(nums_list) / len(nums_list)
-        print(f"The mean temperature was {mean_num}.")
+    # for number in enumerate(weather_data):
 
-    return mean_num
+    #     mean_num = sum(map(int, weather_data)) / len(weather_data)
+    #     print(f"THIS IS MEAN DATA {mean_num}")
+    # return mean_num
 
+    list_of_floats = []
+    for item in weather_data:
+        list_of_floats.append(float(item))
+        avg = sum(list_of_floats) / len(list_of_floats)
+    return(round(avg, 5))
 
-calculate_mean(1)
 
 """Calculates the mean value from a list of numbers.
 
@@ -165,40 +160,40 @@ def find_max(weather_data):
 pass
 
 
-# def generate_summary(weather_data):
-#     with open("tests/data/example_one.csv") as csv_file:
-#         csv_reader = csv.reader(csv_file, delimiter=",")
-#         next(csv_reader)
-#         summary_list = []
-#         output_string = ""
-#         for weather_data in csv_reader:
-#             summary_list.append(weather_data[1])
-#             summary_list.append(weather_data[2])
-#     print(f"This is SUMARU SUMARY LIST {summary_list}")
-#     output_string += f"!---{convert_date(weather_data[0])}----!\n {find_min(summary_list)}\n {find_max(summary_list)}\n {calculate_mean(summary_list)}\n"
-#     # print(output_string)
+def generate_summary(weather_data):
+    count = 0
+    min_temp = []
+    max_temp = []
+    date_time = []
+    for index, item in enumerate(weather_data):
+        if len(weather_data) == 0:
+            return ()
+        if index != []:
+            count += 1
+            date_time.append(item[0])
+            min_temp.append(item[1])
+            max_temp.append(item[2])
+    min_temps, index_date_min = find_min(min_temp)
+    max_temps, index_date_max = find_max(max_temp)
 
-#     # output_string = ""
-#     # test = []
-#     # for weather_data in csv_reader:
-#     # outpu = print(f"GENERATE DATA SUMMARY {weather_data}")
+    min_temp_c = convert_f_to_c(str(min_temps))
+    max_temp_c = convert_f_to_c(str(max_temps))
 
-#     #    test.append(weather_data[1])
-#     # print(weather_data)
-#     # list_test.append(weather_data[2])
-#     #    print(f"TEST LIST: {test}")
-#     # return outpu
-#     return output_string
+    mean_min_c = convert_f_to_c(calculate_mean(min_temp))
+    mean_max_c = convert_f_to_c(calculate_mean(max_temp))
 
+    date_min = date_time[index_date_min]
+    date_max = date_time[index_date_max]
 
-# generate_summary(2)
-# summary_list = [weather_data[1], weather_data[2]]
+    result = ""
+    result += f"{count} Day Overview\n"
+    result += f"  The lowest temperature will be {format_temperature(min_temp_c)}, and will occur on {convert_date(date_min)}.\n"
+    result += f"  The highest temperature will be {format_temperature(max_temp_c)}, and will occur on {convert_date(date_max)}.\n"
+    result += f"  The average low this week is {format_temperature(mean_min_c)}.\n"
+    result += f"  The average high this week is {format_temperature(mean_max_c)}.\n"
 
-# print(f"SUMMARY LIST: {summary_list}")  # SUMMARY LIST: ['0', '2']
-# output_string += f"!---{convert_date(weather_data[0])}----!\nMinimum temperature was {convert_f_to_c(find_min(summary_list)[0])}\n Maximum temparature was {convert_f_to_c(find_max(summary_list)[0])}\n"
-# The mean temperature {convert_f_to_c(calculate_mean(summary_list)[0])}\n Minimum temperature was {convert_f_to_c(find_min(summary_list)[0])}"
-# print(output_string)
-# return output_string
+    return result
+
 
 """Outputs a summary for the given weather data.
 
@@ -207,26 +202,19 @@ pass
     Returns:
         A string containing the summary information.
     """
-pass
 
 
-# def generate_daily_summary(weather_data):
-#     with open("tests/data/example_one.csv") as csv_file:
-#         csv_reader = csv.reader(csv_file, delimiter=",")
-#         next(csv_reader)
+def generate_daily_summary(weather_data):
+    result = ""
 
-#         results = ""
-#         new_list = []
-#         for weather_data in csv_reader:
-#             new_list.append(weather_data[1])
-#             new_list.append(weather_data[2])
-#     # print(f"!!!!!!!!!{new_list}")
-#     results += f"Results are: ---{convert_date(weather_data[0])}----\n Minimum temperature: {convert_f_to_c(find_min(new_list)[0])}\n Maximum temperature: {convert_f_to_c(find_max(new_list)[0])}\n"
+    for item in weather_data:
+        result += f"---- {convert_date(item[0])} ----\n"
+        result += f"  Minimum Temperature: {format_temperature(convert_f_to_c(item[1]))}\n"
+        result += f"  Maximum Temperature: {format_temperature(convert_f_to_c(item[2]))}\n\n"
 
-#     return results
+    return result
 
 
-# generate_daily_summary(1)
 """Outputs a daily summary for the given weather data.
 
     Args:
