@@ -4,4 +4,4 @@ The data project was a learning assignment during She code Plus. I mastered proc
 
 #The screen shot of successful tests
 
-![Tests](/python-tests.png)
+![Tests](/python_tests.png)
